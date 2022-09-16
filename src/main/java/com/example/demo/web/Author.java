@@ -40,12 +40,12 @@ public class Author {
         this.birthDate = birthDate;
     }
 
-    public String setId(String authorId) {
-        return id;
+    public void setId(String authorId) {
+         this.id = authorId;
     }
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
 

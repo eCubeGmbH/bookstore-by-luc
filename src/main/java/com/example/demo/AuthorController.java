@@ -4,33 +4,38 @@ import com.example.demo.web.Author;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/author", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthorController {
-    private HashMap<String, Author> authorList = new HashMap<>();
+    private Map<String, Author> authors = new HashMap<>();
 
-    @PostMapping("/iu")
-    public Author addAuthor(@RequestBody Author author, String uuid) {
-        //add an unique ID to author before saving it to the authorlist | UUID!
+    @PostMapping("/authors")
+    public Author addAuthor(@RequestBody Author author) {
         String authorId = UUID.randomUUID().toString();
         author.setId(authorId);
-        authorList.put("uuid", author);
+        authors.put(authorId, author);
         return author;
-
     }
 
-    @GetMapping("/iu/{uuid}")
-    Author author(@PathVariable String uuid) {
-        Author author = authorList.get(uuid);
-        if (author.getId().equals(uuid)) { //author.id oder author.getId und warum ?
-            return author;
-        } else {
-            return null;
-        }
-
+    @GetMapping("/authors/{authorId}")
+    Author author(@PathVariable String authorId) {
+        return authors.get(authorId);
     }
 
+    @DeleteMapping("/authors/{authorId}")
+    public boolean deleteAuthor(@PathVariable String authorId) {
+        Author author = authors.remove(authorId);
+        return author != null;
+    }
+
+    @PutMapping("/authors/{authorId}")
+    public Author updateAuthor(@PathVariable String authorId, @RequestBody Author author) {
+        author.setId(authorId);
+        authors.put(authorId, author);
+        return author;
+    }
 }
