@@ -1,4 +1,4 @@
-# Projekt: Bookstore Learning Project
+# Projekt: Bookstore Learning Project 
 
 Name: Luc Schulze
 

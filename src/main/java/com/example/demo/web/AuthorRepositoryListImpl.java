@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class AuthorRepositoryListImpl implements AuthorRepository {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthorRepositoryListImpl.class);
 
     private List<Author> authorList = new ArrayList();
