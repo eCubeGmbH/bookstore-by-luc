@@ -15,8 +15,9 @@ Das ist eine Spring-Boot Applikation die im Moment ausschließlich Autoren, in e
 curl localhost:9988/actuator/health
 
 ## Funktionalitäten
-> Anbei ist die Postman Dokumentation. Diese muss einfach lokal in der Postman-Applikation importiert werden, und die einzelnen
-> Methoden werden abrufbar sein.
+>Hier können die Funktionen in Postman getestet werden:
+> 
+> [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/c033d1440c873ea745a3?action=collection%2Fimport)
 
 **Hinweise**:
 > Luc befindet sich noch in der Ausbildung. Es handelt sich um ein reines Lernprojekt.
