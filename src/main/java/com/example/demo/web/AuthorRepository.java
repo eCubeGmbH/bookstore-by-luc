@@ -16,4 +16,8 @@ public interface AuthorRepository {
      default List<Author> getAllByName(String name){
           return List.of();
      }
+
+     default List<Author> getPaginated(int from, int to) {
+          return List.of();
+     }
 }

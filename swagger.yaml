@@ -59,6 +59,16 @@ paths:
           type: string
           required: false
           description: Filter the list of Authors based on name
+        - in: query
+          name: from
+          type: integer
+          required: false
+          description: Get list of Authors from ..(indexPosition)
+        - in: query
+          name: to
+          type: integer
+          required: false
+          description: Get list of Authors to ..(indexPosition)
       responses:
         200:
           description: successful operation
