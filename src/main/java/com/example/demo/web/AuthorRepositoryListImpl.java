@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class AuthorRepositoryListImpl implements AuthorRepository {
@@ -18,7 +19,7 @@ public class AuthorRepositoryListImpl implements AuthorRepository {
     private String errorMessage = "The author you requested doesn't exist. Please review your parameters!";
 
     private int getAuthorIndexInAuthorList(String authorId) {
-        for(int i = 0; i < authorList.size(); ++i) {
+        for(int i = 0; i < authorList.size(); i++) {
             Author currentItem = authorList.get(i);
             if (currentItem.getId().equals(authorId)) {
                 return i;
@@ -34,20 +35,19 @@ public class AuthorRepositoryListImpl implements AuthorRepository {
         return author;
     }
 
-    public List getAll() {
-        if(authorList.size() > 0 ) {
-            authorList.toArray();
-            List<Author> filteredList = new ArrayList<>();
-            String nameFromUser = "Kafka";
-            Author c = authorList.stream()
-                    .filter(x -> x.getName() == nameFromUser)
-                    .findAny()
-                    .get();
-            filteredList.add(c);
-            return filteredList;
-        }else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The List you requested appears to be empty. Please add at least one Object before requesting it");
+    public List<Author> getAll() {
+        return authorList;
+    }
+
+
+    public ArrayList<Author> getAllByName(String name) {
+        ArrayList<Author> filteredList = new ArrayList<>();
+        for (Author currentItem : authorList) {
+            if (currentItem.getName().equalsIgnoreCase(name)) {
+                filteredList.add(currentItem);
+            }
         }
+        return filteredList;
     }
 
     public Author getAuthor(String authorId) {

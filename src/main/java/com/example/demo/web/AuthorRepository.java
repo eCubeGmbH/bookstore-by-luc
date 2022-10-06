@@ -12,4 +12,8 @@ public interface AuthorRepository {
      Author updateAuthor(String authorId, Author authorFromUser);
 
      List<Author> getAll();
+
+     default List<Author> getAllByName(String name){
+          return List.of();
+     }
 }

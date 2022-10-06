@@ -12,7 +12,7 @@ class AuthorController {
     final AuthorRepository repository;
 
     AuthorController() {
-        this.repository = new AuthorRepositoryListImpl();
+        this.repository = new AuthorRepositoryMapImpl();
     }
 
     @PostMapping(consumes = {"application/json"},
@@ -23,8 +23,12 @@ class AuthorController {
 
     @ResponseBody
     @GetMapping(produces = {"application/json"})
-    List<Author> getAllAuthors(){
-        return repository.getAll();
+    List<Author> getAllAuthors(@RequestParam(required = false) String name){
+        if(name == null){
+            return repository.getAll();
+        } else {
+            return repository.getAllByName(name);
+        }
     }
 
     @ResponseBody

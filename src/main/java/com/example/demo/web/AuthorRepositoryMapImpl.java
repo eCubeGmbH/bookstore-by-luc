@@ -28,12 +28,17 @@ public class AuthorRepositoryMapImpl implements AuthorRepository {
     }
 
     public List<Author> getAll() {
-        if(authorMap.size() > 0 ) {
-            List<Author> getAll = new ArrayList<Author>(authorMap.values());
-            return getAll;
-        }else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The List you requested appears to be empty. Please add at least one Object before requesting it");
+        return new ArrayList<>(authorMap.values());
+    }
+
+    public ArrayList<Author> getAllByName(String name) {
+        ArrayList<Author> filteredList = new ArrayList<>();
+        for (Author currentItem : getAll()) {
+            if (currentItem.getName().equalsIgnoreCase(name)) {
+                filteredList.add(currentItem);
+            }
         }
+        return filteredList;
     }
 
     public Author getAuthor(String authorId) {
