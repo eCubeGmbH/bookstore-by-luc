@@ -26,10 +26,10 @@ class AuthorController {
     List<Author> getAllAuthors(@RequestParam(required = false) String name, Integer from, Integer to){
         if(name != null){
             return repository.getAllByName(name);
-        }else if (from >= 0 || to >= 0) {
-            return repository.getPaginated(from, to);
+        }else if(name == null && from == null && to == null) {
+            return repository.getAll();
         }
-        return repository.getAll();
+        return repository.getPaginated(from, to);
     }
 
     @ResponseBody
