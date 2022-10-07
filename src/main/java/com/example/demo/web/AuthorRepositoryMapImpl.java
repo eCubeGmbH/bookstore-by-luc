@@ -32,10 +32,11 @@ public class AuthorRepositoryMapImpl implements AuthorRepository {
     }
 
     public List<Author> getPaginated(int from, int to){
-        List<Author> paginatedList = new ArrayList<>(authorMap.values());
+        List<Author> authorList = new ArrayList<>(authorMap.values());
+        List<Author> paginatedList = new ArrayList<>();
         if (from < to) {
-            for (int i = from; to < authorMap.size(); i++) {
-                Author currentItem = authorMap.get(i);
+            for (int i = from; to < authorList.size(); i++) {
+                Author currentItem = authorList.get(i);
                 paginatedList.add(currentItem);
                 if(i == to) {
                     break;
