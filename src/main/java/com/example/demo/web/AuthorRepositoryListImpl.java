@@ -39,9 +39,19 @@ public class AuthorRepositoryListImpl implements AuthorRepository {
         return authorList;
     }
 
+    public ArrayList<Author> getAllByName(String name) {
+        ArrayList<Author> filteredList = new ArrayList<>();
+        for (Author currentItem : authorList) {
+            if (currentItem.getName().equalsIgnoreCase(name)) {
+                filteredList.add(currentItem);
+            }
+        }
+        return filteredList;
+    }
+
     public List<Author> getPaginated(int from, int to){
         List<Author> paginatedList = new ArrayList<>();
-        if (from < to) {
+        if (from <= to) {
             for (int i = from; to < authorList.size(); i++) {
                 Author currentItem = authorList.get(i);
                 paginatedList.add(currentItem);
@@ -53,9 +63,11 @@ public class AuthorRepositoryListImpl implements AuthorRepository {
         return paginatedList;
     }
 
-    public ArrayList<Author> getAllByName(String name) {
-        ArrayList<Author> filteredList = new ArrayList<>();
-        for (Author currentItem : authorList) {
+    public List<Author> getPaginatedAndName(int from, int to, String name) {
+        List<Author> dummyList;
+        List<Author> filteredList = new ArrayList<>();
+        dummyList = getPaginated(from, to);
+        for (Author currentItem : dummyList) {
             if (currentItem.getName().equalsIgnoreCase(name)) {
                 filteredList.add(currentItem);
             }
@@ -63,31 +75,31 @@ public class AuthorRepositoryListImpl implements AuthorRepository {
         return filteredList;
     }
 
-    public Author getAuthor(String authorId) {
-        LOGGER.info("coming from list");
-        if (getAuthorIndexInAuthorList(authorId) >= 0) {
-            Author author = authorList.get(getAuthorIndexInAuthorList(authorId));
-            return author;
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
+        public Author getAuthor (String authorId){
+            LOGGER.info("coming from list");
+            if (getAuthorIndexInAuthorList(authorId) >= 0) {
+                Author author = authorList.get(getAuthorIndexInAuthorList(authorId));
+                return author;
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
+            }
         }
-    }
 
-    public void deleteAuthor(String authorId) {
-        if (getAuthorIndexInAuthorList(authorId) >= 0) {
-            authorList.remove(getAuthorIndexInAuthorList(authorId));
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
+        public void deleteAuthor (String authorId){
+            if (getAuthorIndexInAuthorList(authorId) >= 0) {
+                authorList.remove(getAuthorIndexInAuthorList(authorId));
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
+            }
         }
-    }
 
-    public Author updateAuthor(String authorId, Author authorFromUser) {
-        if (getAuthorIndexInAuthorList(authorId) >= 0) {
-            authorFromUser.setId(authorId);
-            authorList.set(getAuthorIndexInAuthorList(authorId), authorFromUser);
-            return authorFromUser;
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
+        public Author updateAuthor (String authorId, Author authorFromUser){
+            if (getAuthorIndexInAuthorList(authorId) >= 0) {
+                authorFromUser.setId(authorId);
+                authorList.set(getAuthorIndexInAuthorList(authorId), authorFromUser);
+                return authorFromUser;
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
+            }
         }
     }
-}

@@ -12,7 +12,7 @@ class AuthorController {
     final AuthorRepository repository;
 
     AuthorController() {
-        this.repository = new AuthorRepositoryListImpl();
+        this.repository = new AuthorRepositoryMapImpl();
     }
 
     @PostMapping(consumes = {"application/json"},
@@ -24,12 +24,14 @@ class AuthorController {
     @ResponseBody
     @GetMapping(produces = {"application/json"})
     List<Author> getAllAuthors(@RequestParam(required = false) String name, Integer from, Integer to){
-        if(name != null){
+        if(name != null && from != null && to != null) {
+            return repository.getPaginatedAndName(from, to, name);
+        }else if(name != null) {
             return repository.getAllByName(name);
-        }else if(name == null && from == null && to == null) {
-            return repository.getAll();
-        }
+        }else if(from != null && to != null) {
         return repository.getPaginated(from, to);
+        }
+        return repository.getAll();
     }
 
     @ResponseBody

@@ -292,6 +292,52 @@ class AuthorRepositoryTest {
         assertNotNull(list, "response should not be null");
         assertEquals(3, list.size(), "list size should match");
     }
+
+    @Test
+    void getAuthorsPaginatedAndFilteredByNameListImpl() {
+        //setup, Vorbereitung (sut) system under test
+        AuthorRepository sut = new AuthorRepositoryListImpl();
+        Author author1 = new Author();
+        author1.setName("Dee");
+        Author author2 = new Author();
+        author2.setName("Dux");
+        Author author3 = new Author();
+        author3.setName("Doo");
+        Author author4 = new Author();
+        author4.setName("Dum");
+        Author author5 = new Author();
+        author5.setName("Dam");
+        Author author6 = new Author();
+        author6.setName("Dam");
+        Author author7 = new Author();
+        author7.setName("Dam");
+        author7.setCountry("aadf");
+        Author author8 = new Author();
+        author8.setName("Dam");
+        author8.setCountry("cz");
+        Author author9 = new Author();
+        author9.setName("Dam");
+        Author author10 = new Author();
+        author10.setName("Dam");
+
+        //when, Ausführen
+        sut.addAuthor(author1);     //ind 0
+        sut.addAuthor(author2);     //ind 1
+        sut.addAuthor(author3);     //ind 2
+        sut.addAuthor(author4);     //ind 3
+        sut.addAuthor(author5);     //ind 4
+        sut.addAuthor(author6);     //ind 5
+        sut.addAuthor(author7);     //ind 6
+        sut.addAuthor(author8);
+        sut.addAuthor(author9);
+        sut.addAuthor(author10);
+
+        List<Author> list = sut.getPaginatedAndName(2, 6, "dam");
+
+        //then, Verifizieren
+        assertNotNull(list, "response should not be null");
+        assertEquals(3, list.size(), "list size should match");
+    }
 }
 
 

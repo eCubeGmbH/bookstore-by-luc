@@ -31,10 +31,20 @@ public class AuthorRepositoryMapImpl implements AuthorRepository {
         return new ArrayList<>(authorMap.values());
     }
 
+    public ArrayList<Author> getAllByName(String name) {
+        ArrayList<Author> filteredList = new ArrayList<>();
+        for (Author currentItem : getAll()) {
+            if (currentItem.getName().equalsIgnoreCase(name)) {
+                filteredList.add(currentItem);
+            }
+        }
+        return filteredList;
+    }
+
     public List<Author> getPaginated(int from, int to){
         List<Author> authorList = new ArrayList<>(authorMap.values());
         List<Author> paginatedList = new ArrayList<>();
-        if (from < to) {
+        if (from <= to) {
             for (int i = from; to < authorList.size(); i++) {
                 Author currentItem = authorList.get(i);
                 paginatedList.add(currentItem);
@@ -46,9 +56,11 @@ public class AuthorRepositoryMapImpl implements AuthorRepository {
         return paginatedList;
     }
 
-    public ArrayList<Author> getAllByName(String name) {
-        ArrayList<Author> filteredList = new ArrayList<>();
-        for (Author currentItem : getAll()) {
+    public List<Author> getPaginatedAndName(int from, int to, String name) {
+        List<Author> dummyList;
+        List<Author> filteredList = new ArrayList<>();
+        dummyList = getPaginated(from, to);
+        for (Author currentItem : dummyList) {
             if (currentItem.getName().equalsIgnoreCase(name)) {
                 filteredList.add(currentItem);
             }

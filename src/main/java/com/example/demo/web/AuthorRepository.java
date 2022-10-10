@@ -20,4 +20,8 @@ public interface AuthorRepository {
      default List<Author> getPaginated(int from, int to) {
           return List.of();
      }
+
+     default List<Author> getPaginatedAndName(int from, int to, String name) {
+          return List.of();
+     }
 }
