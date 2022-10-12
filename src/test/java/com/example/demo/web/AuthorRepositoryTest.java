@@ -135,19 +135,39 @@ class AuthorRepositoryTest {
         author4.setName("Dum");
         Author author5 = new Author();
         author5.setName("Dam");
+        Author author6 = new Author();
+        author6.setName("Dam");
+        Author author7 = new Author();
+        author7.setName("Dam");
+        author7.setCountry("aadf");
+        Author author8 = new Author();
+        author8.setName("Dam");
+        author8.setCountry("cz");
+        Author author9 = new Author();
+        author9.setName("Dam");
+        Author author10 = new Author();
+        author10.setName("Dam");
 
-        //when, Ausführen
         sut.addAuthor(author1);
         sut.addAuthor(author2);
         sut.addAuthor(author3);
         sut.addAuthor(author4);
         sut.addAuthor(author5);
+        sut.addAuthor(author6);
+        sut.addAuthor(author7);
+        sut.addAuthor(author8);
+        sut.addAuthor(author9);
+        sut.addAuthor(author10);
 
-        List<Author> list = sut.getAll();
+        //when, Ausführen
+
+        List<Author> list = sut.getAll("dam", 6, 7);
 
         //then, Verifizieren
         assertNotNull(list, "response should not be null");
-        assertEquals(5, list.size(), "list size should match");
+        assertEquals(2, list.size(), "list size should match");
+        assertEquals(6, list.indexOf(author7));
+        assertEquals(7, list.indexOf(author8), "list size should match");
     }
 
     @Test
@@ -164,149 +184,6 @@ class AuthorRepositoryTest {
         author4.setName("Dum");
         Author author5 = new Author();
         author5.setName("Dam");
-
-        //when, Ausführen
-        sut.addAuthor(author1);
-        sut.addAuthor(author2);
-        sut.addAuthor(author3);
-        sut.addAuthor(author4);
-        sut.addAuthor(author5);
-
-        List<Author> list = sut.getAll();
-
-        //then, Verifizieren
-        assertNotNull(list, "response should not be null");
-        assertEquals(5, list.size(), "list size should match");
-    }
-
-    @Test
-    void getAuthorsByNameShouldGetAllAuthorsWithThatNameListImpl() {
-        //setup, Vorbereitung (sut) system under test
-        AuthorRepository sut = new AuthorRepositoryListImpl();
-        Author author1 = new Author();
-        author1.setName("Dee");
-        Author author2 = new Author();
-        author2.setName("Dux");
-        Author author3 = new Author();
-        author3.setName("Dux");
-        Author author4 = new Author();
-        author4.setName("Dum");
-        Author author5 = new Author();
-        author5.setName("Dum");
-
-        //when, Ausführen
-        sut.addAuthor(author1);
-        sut.addAuthor(author2);
-        sut.addAuthor(author3);
-        sut.addAuthor(author4);
-        sut.addAuthor(author5);
-
-        List<Author> list = sut.getAllByName("DUm");
-
-        //then, Verifizieren
-        assertEquals(2, list.size(), "list size should match");
-    }
-
-    @Test
-    void getAuthorsByNameShouldGetAllAuthorsWithThatNameMapImpl() {
-        //setup, Vorbereitung (sut) system under test
-        AuthorRepository sut = new AuthorRepositoryMapImpl();
-        Author author1 = new Author();
-        author1.setName("Dee");
-        Author author2 = new Author();
-        author2.setName("Dux");
-        Author author3 = new Author();
-        author3.setName("Dux");
-        Author author4 = new Author();
-        author4.setName("Dum");
-        Author author5 = new Author();
-        author5.setName("Dum");
-
-        //when, Ausführen
-        sut.addAuthor(author1);
-        sut.addAuthor(author2);
-        sut.addAuthor(author3);
-        sut.addAuthor(author4);
-        sut.addAuthor(author5);
-
-        List<Author> list = sut.getAllByName("DUm");
-
-        //then, Verifizieren
-        assertEquals(2, list.size(), "list size should match");
-    }
-
-    @Test
-    void getAuthorsFromToShouldGetAllAuthorsFromIndexToIndexListImpl() {
-        //setup, Vorbereitung (sut) system under test
-        AuthorRepository sut = new AuthorRepositoryListImpl();
-        Author author1 = new Author();
-        author1.setName("Dee");
-        Author author2 = new Author();
-        author2.setName("Dux");
-        Author author3 = new Author();
-        author3.setName("Doo");
-        Author author4 = new Author();
-        author4.setName("Dum");
-        Author author5 = new Author();
-        author5.setName("Dam");
-
-        //when, Ausführen
-        sut.addAuthor(author1);
-        sut.addAuthor(author2);
-        sut.addAuthor(author3);
-        sut.addAuthor(author4);
-        sut.addAuthor(author5);
-
-        List<Author> list = sut.getPaginated(2, 4);
-
-        //then, Verifizieren
-        assertNotNull(list, "response should not be null");
-        assertEquals(3, list.size(), "list size should match");
-    }
-
-    @Test
-    void getAuthorsFromToShouldGetAllAuthorsFromIndexToIndexMapImpl() {
-        //setup, Vorbereitung (sut) system under test
-        AuthorRepository sut = new AuthorRepositoryMapImpl();
-        Author author1 = new Author();
-        author1.setName("Dee");
-        Author author2 = new Author();
-        author2.setName("Dux");
-        Author author3 = new Author();
-        author3.setName("Doo");
-        Author author4 = new Author();
-        author4.setName("Dum");
-        Author author5 = new Author();
-        author5.setName("Dam");
-
-        //when, Ausführen
-        sut.addAuthor(author1);
-        sut.addAuthor(author2);
-        sut.addAuthor(author3);
-        sut.addAuthor(author4);
-        sut.addAuthor(author5);
-
-        List<Author> list = sut.getPaginated(2, 4);
-
-        //then, Verifizieren
-        assertNotNull(list, "response should not be null");
-        assertEquals(3, list.size(), "list size should match");
-    }
-
-    @Test
-    void getAuthorsPaginatedAndFilteredByNameListImpl() {
-        //setup, Vorbereitung (sut) system under test
-        AuthorRepository sut = new AuthorRepositoryListImpl();
-        Author author1 = new Author();
-        author1.setName("Dee");
-        Author author2 = new Author();
-        author2.setName("Dux");
-        Author author3 = new Author();
-        author3.setName("Doo");
-        Author author4 = new Author();
-        author4.setName("Dum");
-        Author author5 = new Author();
-        author5.setName("Dam");
         Author author6 = new Author();
         author6.setName("Dam");
         Author author7 = new Author();
@@ -320,7 +197,6 @@ class AuthorRepositoryTest {
         Author author10 = new Author();
         author10.setName("Dam");
 
-        //when, Ausführen
         sut.addAuthor(author1);
         sut.addAuthor(author2);
         sut.addAuthor(author3);
@@ -332,57 +208,15 @@ class AuthorRepositoryTest {
         sut.addAuthor(author9);
         sut.addAuthor(author10);
 
-        List<Author> list = sut.getPaginatedAndName(2, 6, "dam");
-
-        //then, Verifizieren
-        assertNotNull(list, "response should not be null");
-        assertEquals(3, list.size(), "list size should match");
-    }
-
-    @Test
-    void getAuthorsPaginatedAndFilteredByNameMapImpl() {
-        //setup, Vorbereitung (sut) system under test
-        AuthorRepository sut = new AuthorRepositoryMapImpl();
-        Author author1 = new Author();
-        author1.setName("Dee");
-        Author author2 = new Author();
-        author2.setName("Dux");
-        Author author3 = new Author();
-        author3.setName("Doo");
-        Author author4 = new Author();
-        author4.setName("Dum");
-        Author author5 = new Author();
-        author5.setName("Dam");
-        Author author6 = new Author();
-        author6.setName("Dam");
-        Author author7 = new Author();
-        author7.setName("Dam");
-        author7.setCountry("aadf");
-        Author author8 = new Author();
-        author8.setName("Dam");
-        author8.setCountry("cz");
-        Author author9 = new Author();
-        author9.setName("Dam");
-        Author author10 = new Author();
-        author10.setName("Dam");
-
         //when, Ausführen
-        sut.addAuthor(author1);
-        sut.addAuthor(author2);
-        sut.addAuthor(author3);
-        sut.addAuthor(author4);
-        sut.addAuthor(author5);
-        sut.addAuthor(author6);
-        sut.addAuthor(author7);
-        sut.addAuthor(author8);
-        sut.addAuthor(author9);
-        sut.addAuthor(author10);
 
-        List<Author> list = sut.getPaginatedAndName(2, 6, "dam");
+            List<Author> list = sut.getAll("dam", 6, 7);
 
         //then, Verifizieren
         assertNotNull(list, "response should not be null");
-        assertEquals(3, list.size(), "list size should match");
+        assertEquals(2, list.size(), "list size should match");
+        assertEquals(6, list.indexOf(author7), "list size should match");
+        assertEquals(7, list.indexOf(author8), "list size should match");
     }
 }
 

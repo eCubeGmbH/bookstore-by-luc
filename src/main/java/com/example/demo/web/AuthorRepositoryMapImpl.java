@@ -27,13 +27,13 @@ public class AuthorRepositoryMapImpl implements AuthorRepository {
         return author;
     }
 
-    public List<Author> getAll() {
+    public List<Author> getAll(String name, int from, int to) {
         return new ArrayList<>(authorMap.values());
     }
 
     public ArrayList<Author> getAllByName(String name) {
         ArrayList<Author> filteredList = new ArrayList<>();
-        for (Author currentItem : getAll()) {
+        for (Author currentItem : getAll("", 1, 1)) {
             if (currentItem.getName().equalsIgnoreCase(name)) {
                 filteredList.add(currentItem);
             }
@@ -45,14 +45,14 @@ public class AuthorRepositoryMapImpl implements AuthorRepository {
         List<Author> authorList = new ArrayList<>(authorMap.values());
         List<Author> paginatedList = new ArrayList<>();
         if (from <= to) {
-            for (int i = from; to < authorList.size(); i++) {
+            for (int i = from; i < to; i++) {
                 Author currentItem = authorList.get(i);
                 paginatedList.add(currentItem);
                 if(i == to) {
                     break;
                 }
             }
-        }
+        }       //from und to defaultwerte
         return paginatedList;
     }
 
@@ -85,5 +85,10 @@ public class AuthorRepositoryMapImpl implements AuthorRepository {
         authorFromUser.setId(authorId);
         authorMap.replace(authorId, authorFromUser);
         return authorFromUser;
+    }
+
+
+    public List<Author> getAll(String name, Integer from, Integer to) {
+        return null;
     }
 }

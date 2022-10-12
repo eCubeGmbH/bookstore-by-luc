@@ -35,8 +35,29 @@ public class AuthorRepositoryListImpl implements AuthorRepository {
         return author;
     }
 
-    public List<Author> getAll() {
-        return authorList;
+    public List<Author> getAll(String name, Integer from, Integer to) {
+        List<Author> filteredList = new ArrayList<>();
+        List<Author> paginatedList = new ArrayList<>();
+        if (from == null || to == null){
+            from = 0;
+            to = authorList.size();
+        }
+            for (int i = from; i <= to; i++) {
+                Author currentItem = authorList.get(i);
+                paginatedList.add(currentItem);
+                if (i == to) {
+                    break;
+                }
+            }
+            for (Author currentItem : paginatedList) {
+                if (currentItem.getName().equalsIgnoreCase(name)) {
+                    filteredList.add(currentItem);
+                }else if (name == null){
+                    filteredList = paginatedList;
+                    break;
+                }
+            }
+        return filteredList;
     }
 
     public ArrayList<Author> getAllByName(String name) {

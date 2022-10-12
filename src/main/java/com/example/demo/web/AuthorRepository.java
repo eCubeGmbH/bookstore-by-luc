@@ -11,17 +11,7 @@ public interface AuthorRepository {
 
      Author updateAuthor(String authorId, Author authorFromUser);
 
-     List<Author> getAll();
-
-     default List<Author> getAllByName(String name){
-          return List.of();
-     }
-
-     default List<Author> getPaginated(int from, int to) {
-          return List.of();
-     }
-
-     default List<Author> getPaginatedAndName(int from, int to, String name) {
+     default List<Author> getAll(String name, Integer from, Integer to){
           return List.of();
      }
 }
