@@ -3,9 +3,10 @@ package com.example.demo.web;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 
 class AuthorRepositoryTest {
 
@@ -219,5 +220,3 @@ class AuthorRepositoryTest {
         assertEquals(7, list.indexOf(author8), "list size should match");
     }
 }
-
-
