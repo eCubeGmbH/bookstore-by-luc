@@ -37,37 +37,37 @@ public class AuthorRepositoryListImpl implements AuthorRepository {
 
     public List<Author> getAll(String name, Integer from, Integer to) {
         List<Author> filteredList = new ArrayList<>();
-        List<Author> paginatedList = new ArrayList<>();
-        if (from == null || to == null){
+
+        //from defaultwert
+        if (from == null) {
             from = 0;
+        } else if(authorList.size() == 0){
+            filteredList = authorList;
+            return filteredList;
+        }
+
+        //to defaultwert
+        if (to == null) {
             to = authorList.size();
         }
-            for (int i = from; i <= to; i++) {
-                Author currentItem = authorList.get(i);
-                paginatedList.add(currentItem);
-                if (i == to) {
-                    break;
-                }
-            }
-            for (Author currentItem : paginatedList) {
+
+        //filtering
+        if(name == null){
+            filteredList = authorList;
+        } else {
+            for (Author currentItem : authorList) {
                 if (currentItem.getName().equalsIgnoreCase(name)) {
                     filteredList.add(currentItem);
-                }else if (name == null){
-                    filteredList = paginatedList;
-                    break;
                 }
             }
-        return filteredList;
-    }
-
-    public ArrayList<Author> getAllByName(String name) {
-        ArrayList<Author> filteredList = new ArrayList<>();
-        for (Author currentItem : authorList) {
-            if (currentItem.getName().equalsIgnoreCase(name)) {
-                filteredList.add(currentItem);
-            }
         }
-        return filteredList;
+
+        //paginating
+        try {
+            return filteredList.subList(from, to + 1);
+        } catch (IndexOutOfBoundsException exception){
+            return filteredList;
+        }
     }
 
     public List<Author> getPaginated(int from, int to){
