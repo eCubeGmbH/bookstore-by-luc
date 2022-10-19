@@ -9,7 +9,7 @@ import java.util.List;
 @RequestMapping(value = {"/api/authors"})
 class AuthorController {
 
-    final AuthorRepository repository;
+    AuthorRepository repository;
 
     AuthorController() {
         this.repository = new AuthorRepositoryListImpl();

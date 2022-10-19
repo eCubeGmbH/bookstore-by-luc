@@ -27,45 +27,40 @@ public class AuthorRepositoryMapImpl implements AuthorRepository {
         return author;
     }
 
-    public List<Author> getAll(String name, int from, int to) {
-        return new ArrayList<>(authorMap.values());
-    }
-
-    public ArrayList<Author> getAllByName(String name) {
-        ArrayList<Author> filteredList = new ArrayList<>();
-        for (Author currentItem : getAll("", 1, 1)) {
-            if (currentItem.getName().equalsIgnoreCase(name)) {
-                filteredList.add(currentItem);
-            }
-        }
-        return filteredList;
-    }
-
-    public List<Author> getPaginated(int from, int to){
+    public List<Author> getAll(String name, Integer from, Integer to) {
         List<Author> authorList = new ArrayList<>(authorMap.values());
-        List<Author> paginatedList = new ArrayList<>();
-        if (from <= to) {
-            for (int i = from; i < to; i++) {
-                Author currentItem = authorList.get(i);
-                paginatedList.add(currentItem);
-                if(i == to) {
-                    break;
+        List<Author> filteredList = new ArrayList<>();
+
+        //from defaultwert
+        if (from == null) {
+            from = 0;
+        } else if(authorList.size() == 0){
+            filteredList = authorList;
+            return filteredList;
+        }
+
+        //to defaultwert
+        if (to == null) {
+            to = authorList.size();
+        }
+
+        //filtering
+        if(name == null){
+            filteredList = authorList;
+        } else {
+            for (Author currentItem : authorList) {
+                if (currentItem.getName().equalsIgnoreCase(name)) {
+                    filteredList.add(currentItem);
                 }
             }
-        }       //from und to defaultwerte
-        return paginatedList;
-    }
-
-    public List<Author> getPaginatedAndName(int from, int to, String name) {
-        List<Author> dummyList;
-        List<Author> filteredList = new ArrayList<>();
-        dummyList = getPaginated(from, to);
-        for (Author currentItem : dummyList) {
-            if (currentItem.getName().equalsIgnoreCase(name)) {
-                filteredList.add(currentItem);
-            }
         }
-        return filteredList;
+
+        //paginating
+        try {
+            return filteredList.subList(from, to + 1);
+        } catch (IndexOutOfBoundsException exception){
+            return filteredList;
+        }
     }
 
     public Author getAuthor(String authorId) {
@@ -85,10 +80,5 @@ public class AuthorRepositoryMapImpl implements AuthorRepository {
         authorFromUser.setId(authorId);
         authorMap.replace(authorId, authorFromUser);
         return authorFromUser;
-    }
-
-
-    public List<Author> getAll(String name, Integer from, Integer to) {
-        return null;
     }
 }

@@ -54,7 +54,7 @@ public class Author {
             return false;
         } else {
             Author author = (Author) o;
-            return Objects.equals(this.id, author.id) && Objects.equals(this.name, author.name) && Objects.equals(this.country, author.country) && Objects.equals(this.birthDate, author.birthDate);
+            return Objects.equals(this.id, author.id);
         }
     }
 

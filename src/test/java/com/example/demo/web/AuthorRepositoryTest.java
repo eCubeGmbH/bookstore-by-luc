@@ -1,11 +1,13 @@
 package com.example.demo.web;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 
 class AuthorRepositoryTest {
 
@@ -125,24 +127,23 @@ class AuthorRepositoryTest {
     void getAllAuthorsShouldGetAllAuthorsInRepositoryListImpl() {
         //setup, Vorbereitung (sut) system under test
         AuthorRepository sut = new AuthorRepositoryListImpl();
+
         Author author1 = new Author();
-        author1.setName("Dee");
+        author1.setName("Dam");
         Author author2 = new Author();
-        author2.setName("Dux");
+        author2.setName("Dax");
         Author author3 = new Author();
-        author3.setName("Doo");
+        author3.setName("Dom");
         Author author4 = new Author();
-        author4.setName("Dum");
+        author4.setName("Dax");
         Author author5 = new Author();
-        author5.setName("Dam");
+        author5.setName("Dax");
         Author author6 = new Author();
-        author6.setName("Dam");
+        author6.setName("Dom");
         Author author7 = new Author();
-        author7.setName("Dam");
-        author7.setCountry("aadf");
+        author7.setName("Dax");
         Author author8 = new Author();
         author8.setName("Dam");
-        author8.setCountry("cz");
         Author author9 = new Author();
         author9.setName("Dam");
         Author author10 = new Author();
@@ -161,37 +162,35 @@ class AuthorRepositoryTest {
 
         //when, Ausführen
 
-        List<Author> list = sut.getAll("dam", 6, 7);
+        List<Author> actualListOfAuthors = sut.getAll("dam", 0, 2);
 
         //then, Verifizieren
-        assertNotNull(list, "response should not be null");
-        assertEquals(2, list.size(), "list size should match");
-        assertEquals(6, list.indexOf(author7));
-        assertEquals(7, list.indexOf(author8), "list size should match");
+        assertNotNull(actualListOfAuthors, "response should not be null");
+        assertEquals(3, actualListOfAuthors.size(), "list size should match");
+        Assertions.assertIterableEquals(List.of(author1, author8, author9), actualListOfAuthors);
     }
 
     @Test
     void getAllAuthorsShouldGetAllAuthorsInRepositoryMapImpl() {
         //setup, Vorbereitung (sut) system under test
         AuthorRepository sut = new AuthorRepositoryMapImpl();
+
         Author author1 = new Author();
-        author1.setName("Dee");
+        author1.setName("Dam");
         Author author2 = new Author();
-        author2.setName("Dux");
+        author2.setName("Dax");
         Author author3 = new Author();
-        author3.setName("Doo");
+        author3.setName("Dom");
         Author author4 = new Author();
-        author4.setName("Dum");
+        author4.setName("Dax");
         Author author5 = new Author();
-        author5.setName("Dam");
+        author5.setName("Dax");
         Author author6 = new Author();
-        author6.setName("Dam");
+        author6.setName("Dom");
         Author author7 = new Author();
-        author7.setName("Dam");
-        author7.setCountry("aadf");
+        author7.setName("Dax");
         Author author8 = new Author();
         author8.setName("Dam");
-        author8.setCountry("cz");
         Author author9 = new Author();
         author9.setName("Dam");
         Author author10 = new Author();
@@ -210,14 +209,11 @@ class AuthorRepositoryTest {
 
         //when, Ausführen
 
-            List<Author> list = sut.getAll("dam", 6, 7);
+        List<Author> actualListOfAuthors = sut.getAll("dam", 0, 2);
 
         //then, Verifizieren
-        assertNotNull(list, "response should not be null");
-        assertEquals(2, list.size(), "list size should match");
-        assertEquals(6, list.indexOf(author7), "list size should match");
-        assertEquals(7, list.indexOf(author8), "list size should match");
+        assertNotNull(actualListOfAuthors, "response should not be null");
+        assertEquals(3, actualListOfAuthors.size(), "list size should match");
+        Assertions.assertIterableEquals(List.of(author1, author8, author9), actualListOfAuthors);
     }
 }
-
-
