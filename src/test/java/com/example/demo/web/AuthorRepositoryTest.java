@@ -177,34 +177,37 @@ class AuthorRepositoryTest {
 
         Author author1 = new Author();
         author1.setName("Dam");
+        author1.setCountry("dda");
+        sut.addAuthor(author1);
         Author author2 = new Author();
         author2.setName("Dax");
+        sut.addAuthor(author2);
         Author author3 = new Author();
         author3.setName("Dom");
+        sut.addAuthor(author3);
         Author author4 = new Author();
         author4.setName("Dax");
+        sut.addAuthor(author4);
         Author author5 = new Author();
         author5.setName("Dax");
+        sut.addAuthor(author5);
         Author author6 = new Author();
         author6.setName("Dom");
+        sut.addAuthor(author6);
         Author author7 = new Author();
         author7.setName("Dax");
+        sut.addAuthor(author7);
         Author author8 = new Author();
         author8.setName("Dam");
+        author8.setCountry("fff");
+        sut.addAuthor(author8);
         Author author9 = new Author();
         author9.setName("Dam");
+        author9.setCountry("aaa");
+        sut.addAuthor(author9);
         Author author10 = new Author();
         author10.setName("Dam");
-
-        sut.addAuthor(author1);
-        sut.addAuthor(author2);
-        sut.addAuthor(author3);
-        sut.addAuthor(author4);
-        sut.addAuthor(author5);
-        sut.addAuthor(author6);
-        sut.addAuthor(author7);
-        sut.addAuthor(author8);
-        sut.addAuthor(author9);
+        author10.setCountry("hhh");
         sut.addAuthor(author10);
 
         //when, Ausführen
