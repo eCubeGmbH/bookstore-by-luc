@@ -17,7 +17,7 @@ curl localhost:9988/actuator/health
 ## Funktionalitäten
 >Hier können die Funktionen in Postman getestet werden:
 > 
-> [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/c033d1440c873ea745a3?action=collection%2Fimport)
+> [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/906b21bc234cd0b2876e?action=collection%2Fimport)
 
 **Hinweise**:
 > Luc befindet sich noch in der Ausbildung. Es handelt sich um ein reines Lernprojekt.
