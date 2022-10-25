@@ -10,9 +10,7 @@ import java.util.*;
 public class AuthorRepositoryMapImpl implements AuthorRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthorRepositoryMapImpl.class);
     private Map<String, Author> authorMap = new HashMap<>();
-
     private String errorMessage = "The author you requested doesn't exist. Please review your parameters!";
-
     private Object errorChecking(String authorId) {
         if(authorMap.get(authorId) == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
