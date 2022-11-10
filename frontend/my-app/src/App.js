@@ -22,7 +22,7 @@ const App = () => {
 
 
     const refresh = () => {
-        fetch('http://localhost:3002/api/authors', {
+        fetch('http://localhost:9988/api/authors', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -34,22 +34,35 @@ const App = () => {
         console.log('hello')
     }
 
-    async function f() {
-        const response =
-        await fetch('http://localhost:3002/api/authors', {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
+    // async function f() {
+    //     let jsonResponse = await fetch('http://localhost:9988/api/authors', {
+    //         method: "GET",
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         }
+    //     }).json();
+    //     setRowsData(jsonResponse);
+    // }
+
+
+    function onUpdateAuthor(updatedAuthor) {
+        const updatedAuthors = rowsData.map(
+            author => {
+                if (author.id === updatedAuthor.id) {
+                    return updatedAuthor
+                } else {return author}
             }
-        },
-    json => response.json(),
-    json => setRowsData(json)
         )
+        setRowsData(updatedAuthor)
     }
 
+    function Authors({authors, onUpdateAuthor}) {
 
+        const [isEditing, setIsEditing] = useState(false);
 
-
+        const [edit, setEdit] = useState(
+            [{id: ' ', name: ' ', birthDate: ' ', country: ' '}])
+        }
 
 
 
@@ -75,10 +88,17 @@ const App = () => {
     }
 
 
+    const [editedId, setEditedId] = useState('')
+
+    function cancelEdit() {
+
+    }
+
     return(
         <div className="container">
             <div className="row">
                 <div className="col-sm-8">
+
                     <table>
                     <tbody className="table" style={tableStyle}>
 
@@ -88,16 +108,19 @@ const App = () => {
                             <th>Date of Birth</th>
                             <th>Country</th>
                             <th><button  onClick={addTableRows} >+</button></th>
-                            <button className="btn btn-outline-danger" onClick={()=>(deleteTableRows(rowsData.id))}>x</button>
-                            <button onClick={response}>Refresh</button>
-
+                            <button onClick={()=>(deleteTableRows(rowsData.id))}>x</button>
+                            <button onClick={refresh}>Refresh</button>
                         </tr>
                         {rowsData.map(rowsData=>
                             <tr key={rowsData.id}>
-                                <td style={tdStyle}>{rowsData.id}</td>
+                                <td style={tdStyle}>{editedId === rowsData.id ? <input value={rowsData.id}/> : rowsData.id }</td>
                                 <td style={tdStyle}>{rowsData.name}</td>
                                 <td style={tdStyle}>{rowsData.birthDate}</td>
                                 <td style={tdStyle}>{rowsData.country}</td>
+                                <td>
+                                    <button onClick={() => {setEditedId(rowsData.id)}}>Edit</button>
+                                    <button onClick={() => {setEditedId('')}}>Cancel</button>
+                                </td>
                             </tr>
 
                         )}
@@ -123,6 +146,7 @@ const App = () => {
                 </div>
             </div>
         </div>
+
     )
 }
 

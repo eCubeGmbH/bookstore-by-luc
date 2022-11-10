@@ -7,6 +7,7 @@ import java.util.List;
 @RestController
 @ResponseBody
 @RequestMapping(value = {"/api/authors"})
+@CrossOrigin
 class AuthorController {
 
     AuthorRepository repository;
