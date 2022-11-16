@@ -1,6 +1,6 @@
 import './App.css';
 import React, {useState} from "react";
-import {Input} from "semantic-ui-react";
+import {render} from "react-dom";
 
 const tableStyle = {
     borderCollapse: 'collapse',
@@ -26,47 +26,29 @@ const App = () => {
         console.log('hello from getAll')
     }
 
-    function onUpdateAuthor(updatedAuthor) {
-        const updatedAuthors = rowsData.map(
-            author => {
-                if (author.id === updatedAuthor.id) {
-                    return updatedAuthor
-                } else {return author}
-            }
-        )
-        setRowsData(updatedAuthor)
-    }
-
-    function Authors({authors, onUpdateAuthor}) {
-
-        const [isEditing, setIsEditing] = useState(false);
-
-        const [edit, setEdit] = useState(
-            [{id: ' ', name: ' ', birthDate: ' ', country: ' '}]
-        )
-    }
-
     const [rowsData, setRowsData] = useState(
         [{id: ' ', name: ' ', birthDate: ' ', country: ' '}]
     )
 
-    const deleteTableRows = () => {
-        const rows = [...rowsData];
-        rows.splice(rowsData.id, 1);
-        setRowsData(rows);
+    const deleteTableRows = (id) => {
+        fetch('http://localhost:9988/api/authors/' + id, {
+                method: 'DELETE',
+            }
+        )   .then(() => console.log("Deletion completed"))
     }
 
-    const handleChange = (index, event) => {
-
-        const {name, value} = event.target;
-        const rowsInput = [...rowsData];
-        rowsInput[index][name] = value;
-        setRowsData(rowsInput);
+    const removeElement = (id) => {
+        const newTable = rowsData.filter(
+            (rowData) => rowData.id !== id
+        );
+        setRowsData(newTable);
     }
 
-    const addTableRows = () => {
-        setRowsData([...rowsData, {id: ' ', name: ' ', country: ' ', birthDate: ' '}])
+    const x = (id) => {
+        removeElement(id);
+        deleteTableRows(id)
     }
+
 
     const add = () => {
         fetch('http://localhost:9988/api/authors', {
@@ -77,9 +59,7 @@ const App = () => {
                 },
                 body: JSON.stringify({
                     firstParam: rowsData.id,
-                    secondParam: <input defaultValue={rowsData.name}/>,
-                    thirdParam: rowsData.country,
-                    fourthParam: rowsData.birthDate
+                    secondParam: <input defaultValue={'Name goes here!'} value={''}/>
                 })
             }
         )   .then(response => response.json())
@@ -87,14 +67,14 @@ const App = () => {
         console.log('hello from add')
     }
 
+    const addTableRows = () => {
+        setRowsData([...rowsData, {id: ' ', name: ' ', country: ' ', birthDate: ' '}])
+    }
+
+
+
 
     const [editedId, setEditedId] = useState('')
-
-    const [editedName, setEditedName] = useState('')
-
-    const [editedCountry, setEditedCountry] = useState('')
-
-    const [editedBirthDate, setEditedBirthDate] = useState('')
 
     return(
         <div className="container">
@@ -108,18 +88,19 @@ const App = () => {
                             <th>Date of Birth</th>
                             <th>Country</th>
                             <th><button  onClick={add} >+</button></th>
-                            <button onClick={()=>(deleteTableRows(rowsData.id))}>x</button>
                             <button onClick={refresh}>Refresh</button>
                         </tr>
                         {rowsData.map(rowsData =>
                             <tr key={rowsData.id}>
                                 <td style={tdStyle}>{rowsData.id}</td>
-                                <td style={tdStyle}>{editedName === rowsData.name ? <input defaultValue={'Max Mustermann'}/> : rowsData.name}</td>
-                                <td style={tdStyle}>{editedBirthDate === rowsData.birthDate ? <input defaultValue={'2022-11-11'}/> : rowsData.birthDate}</td>
-                                <td style={tdStyle}>{editedCountry === rowsData.country ? <input defaultValue={'DE'}/> : rowsData.country}</td>
+                                <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={'Max Mustermann'}/> : rowsData.name}</td>
+                                <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={'2022-11-11'}/> : rowsData.birthDate}</td>
+                                <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={'DE'}/> : rowsData.country}</td>
                                 <td>
-                                    <button onClick={() => {setEditedId(rowsData.id); setEditedName(rowsData.name); setEditedCountry(rowsData.country); setEditedBirthDate(rowsData.birthDate)}}>Edit</button>
-                                    <button onClick={() => {setEditedId(''); setEditedName(''); setEditedCountry(''); setEditedBirthDate('')}}>Cancel</button>
+                                    <button onClick={() => {setEditedId(rowsData.id)}}>Edit</button>
+                                    <button onClick={() => {setEditedId('')}}>Cancel</button>
+                                    <button  onClick={addTableRows} >+</button>
+                                    <button onClick={() => x(rowsData.id)} >x</button>
                                 </td>
                             </tr>
                         )}

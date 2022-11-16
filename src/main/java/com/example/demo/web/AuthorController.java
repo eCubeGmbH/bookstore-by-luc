@@ -35,9 +35,7 @@ class AuthorController {
         return repository.getAuthor(authorId);
     }
 
-    @ResponseBody
-    @DeleteMapping(value = {"/{authorId}"},
-                   consumes = {"application/json"})
+    @DeleteMapping(value = {"/{authorId}"})
     void removeAuthor(@PathVariable String authorId){
         repository.deleteAuthor(authorId);
     }
