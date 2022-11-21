@@ -1,6 +1,5 @@
 import './App.css';
 import React, {useState} from "react";
-import {render} from "react-dom";
 
 const tableStyle = {
     borderCollapse: 'collapse',
@@ -13,6 +12,26 @@ const tdStyle = {
 
 const App = () => {
 
+    const [rowsData, setRowsData] = useState(
+        [{id: ' ', name: ' ', birthDate: ' ', country: ' '}]
+    )
+
+    const [editedId, setEditedId] = useState('')
+
+    const [addedRow, setAddedRow] = useState({id: '', name: '', country: '', birthDate: ''})
+
+    const [rowAddingMode, setRowAddingMode] = useState(false)
+
+    const addTableRows = () => {
+        setRowAddingMode(true)
+    }
+
+    const clearState = () => {
+        setAddedRow()
+    };
+
+    //getAll Method
+    //TODO automate the 'refresh' process => useEffect()
     const refresh = () => {
         fetch('http://localhost:9988/api/authors', {
             method: "GET",
@@ -26,55 +45,31 @@ const App = () => {
         console.log('hello from getAll')
     }
 
-    const [rowsData, setRowsData] = useState(
-        [{id: ' ', name: ' ', birthDate: ' ', country: ' '}]
-    )
-
+    //delete Method
     const deleteTableRows = (id) => {
         fetch('http://localhost:9988/api/authors/' + id, {
                 method: 'DELETE',
             }
-        )   .then(() => console.log("Deletion completed"))
+        )  .then(() => {
+            setRowsData(rowsData.filter(row => row.id !== id))
+        })
+            .then(() => console.log("Deletion completed"))
     }
 
-    const removeElement = (id) => {
-        const newTable = rowsData.filter(
-            (rowData) => rowData.id !== id
-        );
-        setRowsData(newTable);
-    }
-
-    const x = (id) => {
-        removeElement(id);
-        deleteTableRows(id)
-    }
-
-
+    //post Method
     const add = () => {
+
         fetch('http://localhost:9988/api/authors', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    firstParam: rowsData.id,
-                    secondParam: <input defaultValue={'Name goes here!'} value={''}/>
-                })
+                body: JSON.stringify(addedRow)
             }
-        )   .then(response => response.json())
-            .then(json => setRowsData(json))
+        )   .then(response => response.json(), json => setRowsData(oldState => [...oldState, json]))
         console.log('hello from add')
     }
-
-    const addTableRows = () => {
-        setRowsData([...rowsData, {id: ' ', name: ' ', country: ' ', birthDate: ' '}])
-    }
-
-
-
-
-    const [editedId, setEditedId] = useState('')
 
     return(
         <div className="container">
@@ -87,8 +82,9 @@ const App = () => {
                             <th>Full Name</th>
                             <th>Date of Birth</th>
                             <th>Country</th>
-                            <th><button  onClick={add} >+</button></th>
-                            <button onClick={refresh}>Refresh</button>
+                            <th><button  onClick={add} >Add</button></th>
+                            <th><button onClick={refresh}>Refresh</button></th>
+                            <button  onClick={addTableRows} >+</button>
                         </tr>
                         {rowsData.map(rowsData =>
                             <tr key={rowsData.id}>
@@ -99,11 +95,22 @@ const App = () => {
                                 <td>
                                     <button onClick={() => {setEditedId(rowsData.id)}}>Edit</button>
                                     <button onClick={() => {setEditedId('')}}>Cancel</button>
-                                    <button  onClick={addTableRows} >+</button>
-                                    <button onClick={() => x(rowsData.id)} >x</button>
+                                    <button onClick={() => deleteTableRows(rowsData.id)} >x</button>
                                 </td>
                             </tr>
                         )}
+                        {rowAddingMode ? //TODO convert to if Statement
+                            <tr>
+                                <td style={tdStyle}></td>
+                                <td style={tdStyle}><input onChange={e => {setAddedRow({name: e.target.value})}}/></td>
+                                <td style={tdStyle}><input onChange={e => {setAddedRow({country: e.target.value})}}/></td>
+                                <td style={tdStyle}><input onChange={e => {setAddedRow({birthDate: e.target.value})}}/></td>
+                                <td>
+                                    <button onClick={add}>Save</button>
+                                    <button onClick={() => {setRowAddingMode(false)}}>Cancel</button>
+                                </td>
+                            </tr> : <br/>
+                        }
                     </tbody>
                     </table>
                 </div>
