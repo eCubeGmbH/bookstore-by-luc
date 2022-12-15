@@ -16,7 +16,7 @@ const App = () => {
         [{id: ' ', name: ' ', country: ' ', birthDate: ' '}]
     )
 
-    const  [rowEditingMode, setRowEditingMode] = useState(true)
+    const  [rowEditingMode, setRowEditingMode] = useState(false)
 
     const [editedId, setEditedId] = useState(rowsData.id)
 
@@ -58,7 +58,6 @@ const App = () => {
 
     //post Method
     const saveInRowAddingMode = () => {
-
         fetch('http://localhost:9988/api/authors', {
                 method: 'POST',
                 headers: {
@@ -73,7 +72,7 @@ const App = () => {
         setRowAddingMode(false)
     }
 
-
+    //put method
     const saveInRowEditingMode = (id) => {
         fetch('http://localhost:9988/api/authors/' + id, {
                 method: "PUT",
@@ -83,10 +82,24 @@ const App = () => {
                 },
                 body: JSON.stringify(editedRow)
             }
-        ).then(response => response.json())
-            .then(json => {setEditedRow({...editedRow, json})
-            })
-            .then(() => setRowEditingMode(false))
+        ).then(response => {
+            let json = response.json[{}]
+            setEditedRow({...editedRow, json})
+            setRowsData([...rowsData, json])
+            setRowEditingMode(false)
+        })
+    }
+
+    const enableRowEditingMode = (id) => {
+        setEditedId(id)
+        setRowEditingMode(true)
+        console.log("enabled")
+    }
+
+    const disableRowEditingMode = () => {
+        setEditedId('')
+        setRowEditingMode(false)
+        console.log("disabled")
     }
 
     return(
@@ -106,7 +119,6 @@ const App = () => {
 
                         {rowAddingMode ? //TODO convert to if Statement
                             <tr>
-                                <td style={tdStyle}></td>
                                 <td style={tdStyle}><input onChange={e => {setAddedRow({...addedRow, name: e.target.value})}}/></td>
                                 <td style={tdStyle}><input onChange={e => {setAddedRow({...addedRow, birthDate: e.target.value})}}/></td>
                                 <td style={tdStyle}><input onChange={e => {setAddedRow({...addedRow, country: e.target.value})}}/></td>
@@ -119,23 +131,27 @@ const App = () => {
 
                         {rowsData.map(rowsData =>
                             <tr key={rowsData.id}>
-                                <td style={tdStyle}>{rowsData.id}</td>
-                                <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={'Max Hermannus'}/> : rowsData.name}</td>
-                                <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={'2022-11-11'}/> : rowsData.birthDate}</td>
-                                <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={'DE'}/> : rowsData.country}</td>
+                                        <td style={tdStyle}>{rowsData.id}</td>
+                                        <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={rowsData.name} onChange={e => {setEditedRow({...editedRow, name: e.target.value})}}/> : rowsData.name}</td>
+                                        <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={rowsData.birthDate} onChange={e => {setEditedRow({...editedRow, birthDate: e.target.value})}}/> : rowsData.birthDate}</td>
+                                        <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={rowsData.country} onChange={e => {setEditedRow({...editedRow, country: e.target.value})}}/> : rowsData.country}</td>
                                 <td>
-                                    {rowEditingMode ?
+                                    {!rowEditingMode ?
                                         <tr>
-                                            <button onClick={() => setEditedId(rowsData.id)}>Edit</button>
-                                            <button onClick={() => saveInRowEditingMode(rowsData.id)}>Save</button>
-                                            <button onClick={() => {setEditedId('')}}>Cancel</button>
+                                            <button onClick={() => enableRowEditingMode(rowsData.id)}>Edit</button>
                                             <button onClick={() => deleteTableRows(rowsData.id)} >Delete</button>
                                         </tr> : <br/>
                                     }
                                 </td>
+                                <td>
+                                    {rowEditingMode ?
+                                        <tr>
+                                            <button onClick={() => saveInRowEditingMode(rowsData.id)}>Save</button>
+                                            <button onClick={disableRowEditingMode}>Discard changes</button>
+                                        </tr> : <br/>}
+                                </td>
                             </tr>
                         )}
-
                     </tbody>
                     </table>
                 </div>
