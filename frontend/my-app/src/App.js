@@ -83,16 +83,16 @@ const App = () => {
                 body: JSON.stringify(editedRow)
             }
         ).then(response => {
-            let json = response.json[{}]
-            setEditedRow({...editedRow, json})
-            setRowsData([...rowsData, json])
+            let updatedAuthor = response.json()
+            //setRowsData([...rowsData, updatedAuthor])
             setRowEditingMode(false)
         })
     }
 
-    const enableRowEditingMode = (id) => {
-        setEditedId(id)
+    const enableRowEditingMode = (rowData) => {
+        setEditedId(rowData.id)
         setRowEditingMode(true)
+        setEditedRow(rowData)
         console.log("enabled")
     }
 
@@ -119,6 +119,7 @@ const App = () => {
 
                         {rowAddingMode ? //TODO convert to if Statement
                             <tr>
+                                <td style={tdStyle}>{rowsData.id}</td>
                                 <td style={tdStyle}><input onChange={e => {setAddedRow({...addedRow, name: e.target.value})}}/></td>
                                 <td style={tdStyle}><input onChange={e => {setAddedRow({...addedRow, birthDate: e.target.value})}}/></td>
                                 <td style={tdStyle}><input onChange={e => {setAddedRow({...addedRow, country: e.target.value})}}/></td>
@@ -132,13 +133,13 @@ const App = () => {
                         {rowsData.map(rowsData =>
                             <tr key={rowsData.id}>
                                         <td style={tdStyle}>{rowsData.id}</td>
-                                        <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={rowsData.name} onChange={e => {setEditedRow({...editedRow, name: e.target.value})}}/> : rowsData.name}</td>
-                                        <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={rowsData.birthDate} onChange={e => {setEditedRow({...editedRow, birthDate: e.target.value})}}/> : rowsData.birthDate}</td>
-                                        <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={rowsData.country} onChange={e => {setEditedRow({...editedRow, country: e.target.value})}}/> : rowsData.country}</td>
+                                        <td style={tdStyle}>{editedId === rowsData.id ? <input onChange={e => {setEditedRow({...editedRow, name: e.target.value})}}/> : rowsData.name}</td>
+                                        <td style={tdStyle}>{editedId === rowsData.id ? <input onChange={e => {setEditedRow({...editedRow, birthDate: e.target.value})}}/> : rowsData.birthDate}</td>
+                                        <td style={tdStyle}>{editedId === rowsData.id ? <input onChange={e => {setEditedRow({...editedRow, country: e.target.value})}}/> : rowsData.country}</td>
                                 <td>
                                     {!rowEditingMode ?
                                         <tr>
-                                            <button onClick={() => enableRowEditingMode(rowsData.id)}>Edit</button>
+                                            <button onClick={() => enableRowEditingMode(rowsData)}>Edit</button>
                                             <button onClick={() => deleteTableRows(rowsData.id)} >Delete</button>
                                         </tr> : <br/>
                                     }
