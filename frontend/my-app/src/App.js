@@ -16,8 +16,6 @@ const App = () => {
         [{id: ' ', name: ' ', country: ' ', birthDate: ' '}]
     )
 
-    const  [rowEditingMode, setRowEditingMode] = useState(false)
-
     const [editedId, setEditedId] = useState(rowsData.id)
 
     const [addedRow, setAddedRow] = useState({id: '', name: '', country: '', birthDate: ''})
@@ -30,6 +28,8 @@ const App = () => {
         setRowAddingMode(true)
     }
 
+
+
     //getAll Method
     //TODO automate the 'refresh' process => useEffect()
     const refresh = () => {
@@ -39,9 +39,8 @@ const App = () => {
                 "Content-Type": "application/json"
             }
         }
-        )
-            .then(response => response.json())
-            .then(json => setRowsData(json));
+        ).then(response => response.json())
+         .then(json => setRowsData(json));
         console.log('hello from getAll')
     }
 
@@ -50,10 +49,10 @@ const App = () => {
         fetch('http://localhost:9988/api/authors/' + id, {
                 method: 'DELETE',
             }
-        )  .then(() => {
+        ).then(() => {
             setRowsData(rowsData.filter(row => row.id !== id))
         })
-            .then(() => console.log("Deletion completed"))
+         .then(() => console.log("Deletion completed"))
     }
 
     //post Method
@@ -66,15 +65,16 @@ const App = () => {
                 },
                 body: JSON.stringify(addedRow)
             }
-        )   .then(response => response.json())
-            .then(json => setRowsData( [...rowsData, json]))
+        ).then(response => response.json())
+         .then(json => setRowsData( [...rowsData, json]))
         console.log('hello from add')
         setRowAddingMode(false)
     }
 
+
     //put method
-    const saveInRowEditingMode = (id) => {
-        fetch('http://localhost:9988/api/authors/' + id, {
+    const saveInRowEditingMode = (editedId) => {
+        fetch('http://localhost:9988/api/authors/' + editedId, {
                 method: "PUT",
                 headers: {
                     'Accept': 'application/json',
@@ -82,25 +82,56 @@ const App = () => {
                 },
                 body: JSON.stringify(editedRow)
             }
-        ).then(response => {
-            let updatedAuthor = response.json()
-            //setRowsData([...rowsData, updatedAuthor])
-            setRowEditingMode(false)
+        ).then(response => response.json())
+         .then(updatedAuthor => {
+            setRowsData(
+                rowsData.map((rowData) => {
+                    return rowData.id === editedId ? updatedAuthor : rowData
+                }
+            ))
+            console.log(rowsData)
+            console.log(updatedAuthor)
+            setEditedId('')
         })
     }
 
     const enableRowEditingMode = (rowData) => {
         setEditedId(rowData.id)
-        setRowEditingMode(true)
         setEditedRow(rowData)
         console.log("enabled")
     }
 
     const disableRowEditingMode = () => {
         setEditedId('')
-        setRowEditingMode(false)
         console.log("disabled")
     }
+
+    //getALL filteredByName
+    const filteredByName = (name) => {
+        fetch('http://localhost:9988/api/authors' + (name ? `?name=${name}` : ''), {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        ).then(response => response.json())
+         .then(json => setRowsData(json));
+        console.log('hello from getAll')
+    }
+
+    const paginatedGetAll = (from, to) => {        // ==> 'http://localhost:9988/api/authors' + '?from=' + from '&to=' + to,
+        fetch(`http://localhost:9988/api/authors?from=${from}&to=${to}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        ).then(response => response.json())
+         .then(json => setRowsData(json));
+        console.log('hello from getAll')
+    }
+
+
 
     return(
         <div className="container">
@@ -115,15 +146,24 @@ const App = () => {
                             <th>Country</th>
                             <th><button  onClick={addTableRows} >Add</button></th>
                             <th><button onClick={refresh}>Refresh</button></th>
+                            <th> <input
+                                onKeyPress={(e) => {
+                                    if (e.key === "Enter") {
+                                        filteredByName(e.target.value)
+                                        }
+                                    }
+                                }
+                                />
+                            </th>
                         </tr>
 
-                        {rowAddingMode ? //TODO convert to if Statement
+                        {rowAddingMode ?
                             <tr>
                                 <td style={tdStyle}>{rowsData.id}</td>
                                 <td style={tdStyle}><input onChange={e => {setAddedRow({...addedRow, name: e.target.value})}}/></td>
                                 <td style={tdStyle}><input onChange={e => {setAddedRow({...addedRow, birthDate: e.target.value})}}/></td>
                                 <td style={tdStyle}><input onChange={e => {setAddedRow({...addedRow, country: e.target.value})}}/></td>
-                                <td>
+                                <td style={tdStyle}>
                                     <button onClick={saveInRowAddingMode}>Save</button>
                                     <button onClick={() => {setRowAddingMode(false)}}>Cancel</button>
                                 </td>
@@ -133,23 +173,20 @@ const App = () => {
                         {rowsData.map(rowsData =>
                             <tr key={rowsData.id}>
                                         <td style={tdStyle}>{rowsData.id}</td>
-                                        <td style={tdStyle}>{editedId === rowsData.id ? <input onChange={e => {setEditedRow({...editedRow, name: e.target.value})}}/> : rowsData.name}</td>
-                                        <td style={tdStyle}>{editedId === rowsData.id ? <input onChange={e => {setEditedRow({...editedRow, birthDate: e.target.value})}}/> : rowsData.birthDate}</td>
-                                        <td style={tdStyle}>{editedId === rowsData.id ? <input onChange={e => {setEditedRow({...editedRow, country: e.target.value})}}/> : rowsData.country}</td>
+                                        <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={rowsData.name} onChange={e => {setEditedRow({...editedRow, name: e.target.value})}}/> : rowsData.name}</td>
+                                        <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={rowsData.birthDate} onChange={e => {setEditedRow({...editedRow, birthDate: e.target.value})}}/> : rowsData.birthDate}</td>
+                                        <td style={tdStyle}>{editedId === rowsData.id ? <input defaultValue={rowsData.country} onChange={e => {setEditedRow({...editedRow, country: e.target.value})}}/> : rowsData.country}</td>
                                 <td>
-                                    {!rowEditingMode ?
-                                        <tr>
+                                    {editedId !== rowsData.id ? // not in editing mode
+                                    <>
                                             <button onClick={() => enableRowEditingMode(rowsData)}>Edit</button>
                                             <button onClick={() => deleteTableRows(rowsData.id)} >Delete</button>
-                                        </tr> : <br/>
-                                    }
-                                </td>
-                                <td>
-                                    {rowEditingMode ?
-                                        <tr>
+                                    </>
+                                        :                       // editing mode
+                                    <>
                                             <button onClick={() => saveInRowEditingMode(rowsData.id)}>Save</button>
                                             <button onClick={disableRowEditingMode}>Discard changes</button>
-                                        </tr> : <br/>}
+                                    </>}
                                 </td>
                             </tr>
                         )}
