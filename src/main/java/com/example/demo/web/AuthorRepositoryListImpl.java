@@ -70,31 +70,31 @@ public class AuthorRepositoryListImpl implements AuthorRepository {
         }
     }
 
-        public Author getAuthor (String authorId){
-            LOGGER.info("coming from list");
-            if (getAuthorIndexInAuthorList(authorId) >= 0) {
-                Author author = authorList.get(getAuthorIndexInAuthorList(authorId));
-                return author;
-            } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
-            }
-        }
-
-        public void deleteAuthor (String authorId){
-            if (getAuthorIndexInAuthorList(authorId) >= 0) {
-                authorList.remove(getAuthorIndexInAuthorList(authorId));
-            } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
-            }
-        }
-
-        public Author updateAuthor (String authorId, Author authorFromUser){
-            if (getAuthorIndexInAuthorList(authorId) >= 0) {
-                authorFromUser.setId(authorId);
-                authorList.set(getAuthorIndexInAuthorList(authorId), authorFromUser);
-                return authorFromUser;
-            } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
-            }
+    public Author getAuthor (String authorId){
+        LOGGER.info("coming from list");
+        if (getAuthorIndexInAuthorList(authorId) >= 0) {
+            Author author = authorList.get(getAuthorIndexInAuthorList(authorId));
+            return author;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
         }
     }
+
+    public void deleteAuthor (String authorId){
+        if (getAuthorIndexInAuthorList(authorId) >= 0) {
+            authorList.remove(getAuthorIndexInAuthorList(authorId));
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
+        }
+    }
+
+    public Author updateAuthor (String authorId, Author authorFromUser){
+        if (getAuthorIndexInAuthorList(authorId) >= 0) {
+            authorFromUser.setId(authorId);
+            authorList.set(getAuthorIndexInAuthorList(authorId), authorFromUser);
+            return authorFromUser;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
+        }
+    }
+}

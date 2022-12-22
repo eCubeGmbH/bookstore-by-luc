@@ -16,6 +16,12 @@ const App = () => {
         [{id: ' ', name: ' ', country: ' ', birthDate: ' '}]
     )
 
+    const [from, setFrom] = useState(0)
+    const [to, setTo] = useState(4)
+
+
+
+
     const [editedId, setEditedId] = useState(rowsData.id)
 
     const [addedRow, setAddedRow] = useState({id: '', name: '', country: '', birthDate: ''})
@@ -33,7 +39,8 @@ const App = () => {
     //getAll Method
     //TODO automate the 'refresh' process => useEffect()
     const refresh = () => {
-        fetch('http://localhost:9988/api/authors', {
+        console.log(from, to)
+        fetch(`http://localhost:9988/api/authors?from=${from}&to=${to}` , {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -119,20 +126,6 @@ const App = () => {
         console.log('hello from getAll')
     }
 
-    const paginatedGetAll = (from, to) => {        // ==> 'http://localhost:9988/api/authors' + '?from=' + from '&to=' + to,
-        fetch(`http://localhost:9988/api/authors?from=${from}&to=${to}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }
-        ).then(response => response.json())
-         .then(json => setRowsData(json));
-        console.log('hello from getAll')
-    }
-
-
-
     return(
         <div className="container">
             <div className="row">
@@ -146,7 +139,7 @@ const App = () => {
                             <th>Country</th>
                             <th><button  onClick={addTableRows} >Add</button></th>
                             <th><button onClick={refresh}>Refresh</button></th>
-                            <th> <input
+                            <th>Filter <input
                                 onKeyPress={(e) => {
                                     if (e.key === "Enter") {
                                         filteredByName(e.target.value)
@@ -155,6 +148,10 @@ const App = () => {
                                 }
                                 />
                             </th>
+
+                            <th><button> Back </button></th>
+                            <th><button onClick={() => {setFrom(from + 5); setTo(to + 5)}}> Forward </button></th>
+
                         </tr>
 
                         {rowAddingMode ?
