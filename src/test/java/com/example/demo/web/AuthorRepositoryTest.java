@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -162,12 +163,12 @@ class AuthorRepositoryTest {
 
         //when, Ausführen
 
-        List<Author> actualListOfAuthors = sut.getAll("dam", 0, 2);
+        List<Author> actualListOfAuthors = sut.getAll("dam", 0, 12);
 
         //then, Verifizieren
         assertNotNull(actualListOfAuthors, "response should not be null");
-        assertEquals(3, actualListOfAuthors.size(), "list size should match");
-        Assertions.assertIterableEquals(List.of(author1, author8, author9), actualListOfAuthors);
+        assertEquals(4, actualListOfAuthors.size(), "list size should match");
+        Assertions.assertIterableEquals(List.of(author1, author8, author9, author10), actualListOfAuthors);
     }
 
     @Test
@@ -175,7 +176,7 @@ class AuthorRepositoryTest {
         //setup, Vorbereitung (sut) system under test
         AuthorRepository sut = new AuthorRepositoryMapImpl();
 
-        Author author1 = new Author();
+         Author author1 = new Author();
         author1.setName("Dam");
         author1.setCountry("dda");
         sut.addAuthor(author1);
@@ -212,11 +213,26 @@ class AuthorRepositoryTest {
 
         //when, Ausführen
 
-        List<Author> actualListOfAuthors = sut.getAll("dam", 0, 2);
+        List<Author> actualListOfAuthors = sut.getAll("dam", 0, 5);
 
         //then, Verifizieren
         assertNotNull(actualListOfAuthors, "response should not be null");
-        assertEquals(3, actualListOfAuthors.size(), "list size should match");
-        Assertions.assertIterableEquals(List.of(author1, author8, author9), actualListOfAuthors);
+        assertEquals(4, actualListOfAuthors.size(), "list size should match");
+        Assertions.assertIterableEquals(List.of(author1, author8, author9, author10), actualListOfAuthors);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

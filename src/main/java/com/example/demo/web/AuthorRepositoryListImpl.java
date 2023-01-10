@@ -49,6 +49,8 @@ public class AuthorRepositoryListImpl implements AuthorRepository {
         //to defaultwert
         if (to == null) {
             to = authorList.size();
+        } else if(to > authorList.size()){
+            to = authorList.size();
         }
 
         //filtering
