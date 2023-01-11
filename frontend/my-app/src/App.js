@@ -19,9 +19,6 @@ const App = () => {
     const [from, setFrom] = useState(0)
     const [to, setTo] = useState(4)
 
-
-
-
     const [editedId, setEditedId] = useState(rowsData.id)
 
     const [addedRow, setAddedRow] = useState({id: '', name: '', country: '', birthDate: ''})
@@ -34,7 +31,9 @@ const App = () => {
         setRowAddingMode(true)
     }
 
-
+    if(to > rowsData.length) {
+        setTo(rowsData.length)
+    }
 
     //getAll Method
     //TODO automate the 'refresh' process => useEffect()
@@ -49,6 +48,7 @@ const App = () => {
         ).then(response => response.json())
          .then(json => setRowsData(json));
         console.log('hello from getAll')
+        console.log(from, to)
     }
 
     //delete Method
@@ -149,7 +149,7 @@ const App = () => {
                                 />
                             </th>
 
-                            <th><button> Back </button></th>
+                            <th><button onClick={() => {setFrom(from - 5); setTo(to - 5)}}> Back </button></th>
                             <th><button onClick={() => {setFrom(from + 5); setTo(to + 5)}}> Forward </button></th>
 
                         </tr>
